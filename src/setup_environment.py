@@ -12,9 +12,6 @@ import logging
 
 import utils
 
-log = logging.getLogger(__name__)
-
-
 class Logger:
     def __enter__(self):
         """Creates file and returns self"""
@@ -22,6 +19,7 @@ class Logger:
         self.path = utils.create_file_path(self.name)
         self.log_file = open(self.path, "w")
         self.should_destroy_log = False
+        self._log = logging.getLogger(__name__)
         return self
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
@@ -32,13 +30,13 @@ class Logger:
         if self.should_destroy_log:
             os.remove(self.path)
         else:
-            log.warning("\n\nSomething broke! Check setup_environment.log for details")
+            self._log.warning("\n\nSomething broke! Check setup_environment.log for details")
 
     def log(self, message: str, should_output: bool = True):
         """Adds something to the file, prints it by default"""
         self.log_file.write(f"\n{message}")
         if should_output:
-            log.info(message)
+        self._log.info(message)
 
     def discard(self):
         """Changes the state of the file being destroyed"""

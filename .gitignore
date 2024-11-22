@@ -125,5 +125,7 @@ dmypy.json
 # End of https://www.gitignore.io/api/python
 
 ### Repository-specific ###
+api_keys/
 data/
+schema/
 *.csv
